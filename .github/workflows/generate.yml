@@ -1,0 +1,24 @@
+name: Generate
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-szmsz:
+    runs-on: ubuntu-latest
+    name: Create document
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Convert to pdf
+      id: convert-to-pdf
+      uses: closoco/pdflatex-action@v1.0.0
+      with:
+        texFile: ./szmsz.tex
+    - name: Store pdf
+      uses: actions/upload-artifact@v2
+      with:
+        name: szmsz.pdf
+        path: szmsz.pdf
