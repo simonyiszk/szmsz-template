@@ -1,24 +1,82 @@
-name: Generate
+name: Generate PDFs
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
+  build-matrix:
+    name: Build matrix
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get all files with .tex
+        uses: sergeysova/jq-action@v2
+        id: find
+        with:
+          cmd: | 
+            find . -mindepth 1 -name "*.tex" |
+              jq -R -s -c 'split("\n")[:-1]' | 
+              sed 's/"/\\"/g'
+
+      - name: Setup matrix
+        id: set-matrix
+        run: echo "matrix=${{ steps.find.outputs.value }}" >> $GITHUB_OUTPUT
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+  
   build-szmsz:
     runs-on: ubuntu-latest
     name: Create document
+    needs:
+      - build-matrix
+    strategy:
+      fail-fast: false # Continue with other directories if one fails
+      matrix:
+        path: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
     steps:
-    - name: Checkout
+    - name: Checkout code
       uses: actions/checkout@v4
+
     - name: Convert to pdf
       id: convert-to-pdf
-      uses: closoco/pdflatex-action@v1.0.0
+      uses: xu-cheng/latex-action@v3
       with:
-        texFile: ./szmsz.tex
+        root_file: ${{ matrix.path }}
+
+    - name: Find PDF
+      id: find-pdf
+      run: |
+        find $(dirname ${{ matrix.path }}) -maxdepth 1 -name '*.pdf' -exec echo "pdf={}" >> $GITHUB_OUTPUT \;
+        echo "artifact=$(basename ${{ matrix.path }}))" >> $GITHUB_OUTPUT
+
     - name: Store pdf
       uses: actions/upload-artifact@v4
       with:
-        name: szmsz.pdf
-        path: szmsz.pdf
+        name: ${{ steps.find-pdf.outputs.artifact }}
+        path: ${{ steps.find-pdf.outputs.pdf }}
+        retention-days: 1
+
+  collect-artifacts:
+    runs-on: ubuntu-latest
+    needs:
+      - build-szmsz
+    steps:
+    - name: Download artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: downloaded
+
+    - name: Place artifacts
+      run: rsync -av downloaded/*/*/ pdfs/
+
+    - name: Store pdf
+      uses: actions/upload-artifact@v4
+      with:
+        name: pdfs
+        path: pdfs/
+        retention-days: 90

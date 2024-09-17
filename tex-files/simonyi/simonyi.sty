@@ -31,7 +31,7 @@
 
 % creating base header
 \pagestyle{fancy}
-\rhead{\includegraphics[height=1cm]{images/logo.png}}
+\rhead{\includegraphics[height=0.7cm]{images/simonyi-logo.png}}                   % itt a magasságán lehet finomhangolni
 
 %define colors for links
 \definecolor{ceruleanblue}{rgb}{0.16, 0.32, 0.75}
@@ -54,27 +54,31 @@
 % placing a pdf as background and adding text on top
 \includepdf[pages=1,picturecommand*={
     % selecting placement, font size and text type
-    \put(210,630){
+    \put(215,630){
         \fontsize{28}{28}\selectfont{
             \textsc{\textbf{SZERVEZETI ÉS}}
         }
     }
-    \put(150,590){
+    \put(140,590){
         \fontsize{28}{28}\selectfont{
             \textsc{\textbf{MŰKÖDÉSI SZABÁLYZAT}}
         }
     }
-    \put(290,540){\fontsize{28}{28}\selectfont{
-        \Large{\textbf{Sysadmin}}}
+    \put(208,540){                                              % Itt az X koordinátát lehet finomhangolni
+        \fontsize{28}{28}\selectfont{
+            \Large{\textbf{Simonyi Károly Szakkollégium}}
+        }
     }
-    \put(140,50){\fontsize{28}{28}\selectfont{
-        \Large{\textbf{Budapest, 2021.03.24.}}}
+    \put(140,50){
+        \fontsize{28}{28}\selectfont{
+            \Large{\textbf{Budapest, 2024. október 1.}}
+        }
     }
-}]{images/front_page.pdf}}
+}]{images/simonyi-frontpage-bg.pdf}}
 
 
 % section header
-\lhead{Szervezeti és Működési Szabályzat - Sysadmin}
+\lhead{Szervezeti és Működési Szabályzat - Simonyi Károly Szakkollégium}
 \linespread{1.25}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

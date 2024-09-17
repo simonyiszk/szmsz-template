@@ -1,0 +1,111 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                       Main document style
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Importing user packages (librarys for different functions and commands)
+\usepackage[utf8]{inputenc}
+\usepackage{subfiles}               % add subfiles
+\usepackage[T1]{fontenc}            % text font
+\usepackage{lmodern}                % font
+\usepackage{pdfpages, pdflscape}    % add pdf's
+\usepackage{gensymb, textcomp}      % add symbols
+\usepackage{lastpage}               % get the last page number
+\usepackage{graphicx}               % add images
+\usepackage{setspace}               % define size of space (infinite)
+\usepackage{xcolor}                 % colors
+\usepackage{comment}                % comments
+\usepackage{fancyhdr}               % to get fancy headers
+\usepackage [background=black, arrow=red, text=white]{callouts}
+\usepackage{wrapfig}                % positioning figures
+\usepackage{subcaption}             % position mulitple figures
+
+% page settings
+\setlength{\marginparwidth}{2cm}    % margins
+\usepackage[a4paper,left=2.5cm,right=2.5cm,top=2.8cm,bottom=4cm]{geometry}
+\setlength\parindent{0pt}
+\setlength{\parskip}{1em}
+
+\setlength{\headheight}{37pt} % header hight
+
+\cfoot\thepage % page number as footer
+
+% creating base header
+\pagestyle{fancy}
+\rhead{\includegraphics[height=1.2cm]{images/kir-dev-logo.png}}                   % itt a magasságán lehet finomhangolni
+
+%define colors for links
+\definecolor{ceruleanblue}{rgb}{0.16, 0.32, 0.75}
+\definecolor{coolblack}{rgb}{0.0, 0.18, 0.39}
+
+
+% clickable table of contents
+\usepackage{hyperref}
+\hypersetup{linktoc = all, colorlinks=true,
+    linkcolor=coolblack, filecolor=magenta,
+    urlcolor=ceruleanblue, citecolor=ceruleanblue}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                   Command for the first page
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*\FirstPage{
+\thispagestyle{empty}
+% placing a pdf as background and adding text on top
+\includepdf[pages=1,picturecommand*={
+    % selecting placement, font size and text type
+    \put(160,630){
+        \fontsize{28}{28}\selectfont{
+            \textsc{\textbf{SZERVEZETI ÉS}}
+        }
+    }
+    \put(85,590){
+        \fontsize{28}{28}\selectfont{
+            \textsc{\textbf{MŰKÖDÉSI SZABÁLYZAT}}
+        }
+    }
+    \put(250,540){                                              % Itt az X koordinátát lehet finomhangolni
+        \fontsize{28}{28}\selectfont{
+            \Large{\textbf{Kir-Dev}}                            % Itt nevezd át a körödre
+        }
+    }
+    \put(55,70){
+        \fontsize{28}{28}\selectfont{
+            \Large{\textbf{Budapest, 2024. október 1.}}
+        }
+    }
+}]{images/kir-dev-frontpage-bg.pdf}}
+
+
+% section header
+\lhead{Szervezeti és Működési Szabályzat - Kir-Dev}
+\linespread{1.25}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                       New Commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%creating paragraphs --> \newpara
+\newcommand{\newpara}{\vskip 2mm}
+
+%add pdf's --> \addpdf
+\newcommand*\addpdf[1]{
+\includepdf[pages=-]{#1}}
+
+%add pdf's in landscape --> \addpdflandscape
+\newcommand*\addpdflscape[1]{
+\begin{landscape}
+\newgeometry{margin=0cm}
+\includepdf[pages=-,angle=90]{#1}
+\end{landscape}}
+
+%add sections with 4 numbers --> \paragraph
+\usepackage{titlesec}
+\setcounter{secnumdepth}{4}
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries}{\thesection.\S}{1em}{}
