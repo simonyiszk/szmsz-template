@@ -19,6 +19,12 @@
 \usepackage{wrapfig}                % positioning figures
 \usepackage{subcaption}             % position mulitple figures
 
+% hungarian language
+\usepackage[utf8]{inputenc}
+\usepackage{t1enc}
+\def\magyarOptions{defaults=hu-min}
+\usepackage[magyar]{babel}
+
 % page settings
 \setlength{\marginparwidth}{2cm}    % margins
 \usepackage[a4paper,left=2.5cm,right=2.5cm,top=2.8cm,bottom=4cm]{geometry}
@@ -56,12 +62,12 @@
     % selecting placement, font size and text type
     \put(215,630){
         \fontsize{28}{28}\selectfont{
-            \textsc{\textbf{SZERVEZETI ÉS}}
+            \textbf{SZERVEZETI ÉS}
         }
     }
     \put(140,590){
         \fontsize{28}{28}\selectfont{
-            \textsc{\textbf{MŰKÖDÉSI SZABÁLYZAT}}
+            \textbf{MŰKÖDÉSI SZABÁLYZAT}
         }
     }
     \put(208,540){                                              % Itt az X koordinátát lehet finomhangolni
