@@ -18,7 +18,7 @@ jobs:
         uses: sergeysova/jq-action@v2
         id: find
         with:
-          cmd: | 
+          cmd: |
             find . -mindepth 1 -name "*.tex" |
               jq -R -s -c 'split("\n")[:-1]' | 
               sed 's/"/\\"/g'
@@ -28,7 +28,7 @@ jobs:
         run: echo "matrix=${{ steps.find.outputs.value }}" >> $GITHUB_OUTPUT
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
-  
+
   build-szmsz:
     runs-on: ubuntu-latest
     name: Create document
@@ -39,47 +39,49 @@ jobs:
       matrix:
         path: ${{ fromJson(needs.build-matrix.outputs.matrix) }}
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Change directory
-      run: cd $(dirname ${{ matrix.path }})
+      - name: Get dir of file
+        id: get-dir
+        run: echo "dir=$(dirname ${{ matrix.path }})" >> $GITHUB_OUTPUT
 
-    - name: Convert to pdf
-      id: convert-to-pdf
-      uses: xu-cheng/latex-action@v3
-      with:
-        root_file: ${{ matrix.path }}
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v2
+        with:
+          working_directory: ${{ steps.get-dir.outputs.dir }}
+          root_file: ${{ matrix.path }}
+          latexmk_shell_escape: true
 
-    - name: Find PDF
-      id: find-pdf
-      run: |
-        find $(dirname ${{ matrix.path }}) -maxdepth 1 -name '*.pdf' -exec echo "pdf={}" >> $GITHUB_OUTPUT \;
-        echo "artifact=$(basename ${{ matrix.path }}))" >> $GITHUB_OUTPUT
+      - name: Find PDF
+        id: find-pdf
+        run: |
+          find $(dirname ${{ matrix.path }}) -maxdepth 1 -name '*.pdf' -exec echo "pdf={}" >> $GITHUB_OUTPUT \;
+          echo "artifact=$(basename ${{ matrix.path }}))" >> $GITHUB_OUTPUT
 
-    - name: Store pdf
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ steps.find-pdf.outputs.artifact }}
-        path: ${{ steps.find-pdf.outputs.pdf }}
-        retention-days: 1
+      - name: Store pdf
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.find-pdf.outputs.artifact }}
+          path: ${{ steps.find-pdf.outputs.pdf }}
+          retention-days: 1
 
   collect-artifacts:
     runs-on: ubuntu-latest
     needs:
       - build-szmsz
     steps:
-    - name: Download artifacts
-      uses: actions/download-artifact@v4
-      with:
-        path: downloaded
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: downloaded
 
-    - name: Place artifacts
-      run: rsync -av downloaded/*/*/ pdfs/
+      - name: Place artifacts
+        run: rsync -av downloaded/*/*/ pdfs/
 
-    - name: Store pdf
-      uses: actions/upload-artifact@v4
-      with:
-        name: pdfs
-        path: pdfs/
-        retention-days: 90
+      - name: Store pdf
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdfs
+          path: pdfs/
+          retention-days: 90
