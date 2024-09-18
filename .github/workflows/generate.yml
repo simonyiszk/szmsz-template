@@ -46,7 +46,7 @@ jobs:
         id: get-dir
         run: |
           echo "dir=$(dirname ${{ matrix.path }})" >> $GITHUB_OUTPUT
-          echo "artifact=$(basename ${{ matrix.path }}))" >> $GITHUB_OUTPUT
+          echo "artifact=$(basename ${{ matrix.path }})" >> $GITHUB_OUTPUT
 
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v2
