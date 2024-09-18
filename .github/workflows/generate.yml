@@ -44,25 +44,26 @@ jobs:
 
       - name: Get dir of file
         id: get-dir
-        run: echo "dir=$(dirname ${{ matrix.path }})" >> $GITHUB_OUTPUT
+        run: |
+          echo "dir=$(dirname ${{ matrix.path }})" >> $GITHUB_OUTPUT
+          echo "artifact=$(basename ${{ matrix.path }}))" >> $GITHUB_OUTPUT
 
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v2
         with:
           working_directory: ${{ steps.get-dir.outputs.dir }}
-          root_file: ${{ matrix.path }}
+          root_file: ${{ steps.get-dir.outputs.artifact }}
           latexmk_shell_escape: true
 
       - name: Find PDF
         id: find-pdf
         run: |
           find $(dirname ${{ matrix.path }}) -maxdepth 1 -name '*.pdf' -exec echo "pdf={}" >> $GITHUB_OUTPUT \;
-          echo "artifact=$(basename ${{ matrix.path }}))" >> $GITHUB_OUTPUT
 
       - name: Store pdf
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.find-pdf.outputs.artifact }}
+          name: ${{ steps.get-dir.outputs.artifact }}
           path: ${{ steps.find-pdf.outputs.pdf }}
           retention-days: 1
 
