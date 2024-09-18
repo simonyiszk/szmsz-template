@@ -42,6 +42,9 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Change directory
+      run: cd $(dirname ${{ matrix.path }})
+
     - name: Convert to pdf
       id: convert-to-pdf
       uses: xu-cheng/latex-action@v3
