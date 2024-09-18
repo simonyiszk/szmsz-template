@@ -15,9 +15,10 @@
 \usepackage{xcolor}                 % colors
 \usepackage{comment}                % comments
 \usepackage{fancyhdr}               % to get fancy headers
-\usepackage [background=black, arrow=red, text=white]{callouts}
+\usepackage[background=black, arrow=red, text=white]{callouts}
 \usepackage{wrapfig}                % positioning figures
 \usepackage{subcaption}             % position mulitple figures
+\usepackage[toc,page]{appendix}     % add appendix
 
 % hungarian language
 \usepackage[utf8]{inputenc}
@@ -109,9 +110,11 @@
 \usepackage{titlesec}
 \setcounter{secnumdepth}{4}
 \titleformat{\paragraph}
-{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+    {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 \titlespacing*{\paragraph}
-{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+    {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 
 \titleformat{\section}
-  {\normalfont\Large\bfseries}{\thesection.\S}{1em}{}
+    {\normalfont\Large\bfseries}{\thesection.\S}{1em}{} 
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thesubsection}{\Roman{subsection}}
